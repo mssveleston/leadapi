@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Lead;
+use App\Models\User;
+use http\Env\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use function PHPUnit\Framework\returnValueMap;
+
+class UserController extends Controller
+{
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        try {
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'invalid_credentials'], 400);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+
+        return response()->json(compact('token'));
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'descp'=>'',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $user = User::create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'descp' => $request->get('descp'),
+            'password' => Hash::make($request->get('password')),
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(compact('user','token'),201);
+    }
+
+
+
+    public function getAuthenticatedUser(Request $request)
+    {
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['token_expired'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['token_invalid'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['token_absent'], $e->getStatusCode());
+
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone'=>'required|digits:10',
+            'dob' => 'date_format:d-m-Y',
+            'credit_score' =>'numeric|nullable',
+            'covid19_exposed'=>'boolean',
+            'existing_insurance'=>'',
+
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $val=[
+            'name'=>$request->get('name'),
+            'email'=>$request->get('email'),
+            'phone'=>$request->get('phone'),
+            'dob'=>$request->get('dob'),
+            'credit_score'=>$request->get('credit_score'),
+            ];
+
+
+        $val = Lead::create([
+            'name'=>$request->get('name'),
+            'email'=>$request->get('email'),
+            'phone'=>$request->get('phone'),
+            'dob'=>$request->get('dob'),
+            'credit_score'=>$request->get('credit_score'),
+            'health_condition'=>$request->get('health_condition'),
+            'covid19_exposed'=>$request->get('covid19_exposed'),
+            'existing_insurance'=>$request->get('existing_insurance'),
+        ]);
+
+
+        //return response()->json(compact('user','val'));
+          return response()->json(compact('val'));
+        //return response()->json(['success'=>true]);
+    }
+}
