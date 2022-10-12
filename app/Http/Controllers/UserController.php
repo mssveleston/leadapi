@@ -80,12 +80,11 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255',
             'phone'=>'required|digits:10',
             'dob' => 'date_format:d-m-Y',
             'credit_score' =>'numeric|nullable',
             'covid19_exposed'=>'boolean',
-            'existing_insurance'=>'',
 
         ]);
 
@@ -93,17 +92,18 @@ class UserController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $val=[
+        /*$val=[
             'name'=>$request->get('name'),
             'email'=>$request->get('email'),
             'phone'=>$request->get('phone'),
             'dob'=>$request->get('dob'),
             'credit_score'=>$request->get('credit_score'),
-            ];
+            ];*/
 
 
         $val = Lead::create([
             'name'=>$request->get('name'),
+            'campaign_id'=>$request->get('campaign_id'),
             'email'=>$request->get('email'),
             'phone'=>$request->get('phone'),
             'dob'=>$request->get('dob'),

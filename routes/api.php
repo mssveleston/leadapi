@@ -24,6 +24,6 @@ Route::post('login', 'App\Http\Controllers\UserController@authenticate');
 Route::get('open', 'App\Http\Controllers\DataController@open');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::post('user', 'App\Http\Controllers\UserController@getAuthenticatedUser');
+    Route::post('lead', 'App\Http\Controllers\UserController@getAuthenticatedUser');
     Route::get('closed', 'App\Http\Controllers\DataController@closed');
 });

@@ -12,6 +12,7 @@ class Lead extends Model
     protected $table = 'leads';
     protected $fillable = [
         'name',
+        'campaign_id',
         'email',
         'phone',
         'dob',
