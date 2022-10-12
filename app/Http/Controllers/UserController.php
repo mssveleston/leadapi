@@ -102,8 +102,8 @@ class UserController extends Controller
 
 
         $val = Lead::create([
-            'name'=>$request->get('name'),
             'campaign_id'=>$request->get('campaign_id'),
+            'name'=>$request->get('name'),
             'email'=>$request->get('email'),
             'phone'=>$request->get('phone'),
             'dob'=>$request->get('dob'),
