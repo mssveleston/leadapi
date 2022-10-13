@@ -74,15 +74,6 @@ class UserController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        /*$val=[
-            'name'=>$request->get('name'),
-            'email'=>$request->get('email'),
-            'phone'=>$request->get('phone'),
-            'dob'=>$request->get('dob'),
-            'credit_score'=>$request->get('credit_score'),
-            ];*/
-
-
         $val = Lead::create([
             'campaign_id'=>$request->get('campaign_id'),
             'name'=>$request->get('name'),
@@ -100,10 +91,6 @@ class UserController extends Controller
         }else{
             return response()->json(compact('val'));
         }
-
-        //return response()->json(compact('user','val'));
-        // return response()->json(compact('val'));
-        //return response()->json(['success'=>true]);
     }
 
 
