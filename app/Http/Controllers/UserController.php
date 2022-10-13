@@ -55,36 +55,18 @@ class UserController extends Controller
     }
 
 
-
-    public function getAuthenticatedUser(Request $request)
-    {
-        try {
-
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
-            }
-
-        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-            return response()->json(['token_expired'], $e->getStatusCode());
-
-        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-            return response()->json(['token_invalid'], $e->getStatusCode());
-
-        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-            return response()->json(['token_absent'], $e->getStatusCode());
-
-        }
+    public function savelead($request){
 
         $validator = Validator::make($request->all(), [
+            'campaign_id'=>'bail|required|numeric|exists:campaigns,id',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'phone'=>'required|digits:10',
             'dob' => 'date_format:d-m-Y',
-            'credit_score' =>'numeric|nullable',
-            'covid19_exposed'=>'boolean',
+            'credit_score' =>'sometimes|numeric|nullable|required_if:campaign_id,=,1',
+            'heath_conditions'=>'sometimes|required_if:campaign_id,=,2',
+            'covid19_exposed'=>'sometimes|boolean|required_if:campaign_id,=,2',
+            'existing_insurance'=>'sometimes|required_if:campaign_id,=,2',
 
         ]);
 
@@ -113,9 +95,40 @@ class UserController extends Controller
             'existing_insurance'=>$request->get('existing_insurance'),
         ]);
 
+        if($val->save()){
+            return response()->json(['success'=>true]);
+        }else{
+            return response()->json(compact('val'));
+        }
 
         //return response()->json(compact('user','val'));
-          return response()->json(compact('val'));
+        // return response()->json(compact('val'));
         //return response()->json(['success'=>true]);
+    }
+
+
+    public function getAuthenticatedUser(Request $request)
+    {
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['token_expired'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['token_invalid'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['token_absent'], $e->getStatusCode());
+
+        }
+
+        return $this->savelead($request);
     }
 }
