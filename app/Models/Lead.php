@@ -16,6 +16,7 @@ class Lead extends Model
         'email',
         'phone',
         'dob',
+        'region',
         'credit_score',
         'health_conditions',
         'covid19_exposed',

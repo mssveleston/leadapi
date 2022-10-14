@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('dob')->nullable();
+            $table->string('region')->nullable();
             $table->string('credit_score')->nullable();
             $table->string('heath_conditions')->nullable();
             $table->string('covid19_exposed')->nullable();

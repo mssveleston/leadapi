@@ -1,15 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewLeadMail;
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\Campaign;
+use App\Models\Buyers;
+use App\Models\Verticals;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use function PHPUnit\Framework\isNull;
 use function PHPUnit\Framework\returnValueMap;
 
 class UserController extends Controller
@@ -54,9 +59,19 @@ class UserController extends Controller
         return response()->json(compact('user','token'),201);
     }
 
+    public function getbuyeremails($id){
+        $data = Campaign::leftJoin('verticals','verticals.campaign_id','=','campaigns.id')
+            ->leftJoin('buyers','verticals.buyer_id','=','buyers.id')
+            ->where('campaigns.id','=',$id)
+            ->whereNotNull('buyers.email')
+            ->get('buyers.email');
 
+
+            return $data;
+
+
+    }
     public function savelead($request){
-
         $validator = Validator::make($request->all(), [
             'campaign_id'=>'bail|required|numeric|exists:campaigns,id',
             'name' => 'required|string|max:255',
@@ -87,10 +102,27 @@ class UserController extends Controller
         ]);
 
         if($val->save()){
-            return response()->json(['success'=>true]);
+            $reply =  $this->getbuyeremails($request->get('campaign_id'));
+
+             if(count($reply)>0){
+                     //check if email exists and send email
+                     $details['email'] = 'rveleston@gmail.com';
+
+                     dispatch(new \App\Jobs\SendEmailJob($details));
+
+                     //dd('Send Email Successfully');
+
+             }
+                 return response()->json(['success'=>true]);
+
+            //return response()->json($reply);
+
         }else{
             return response()->json(compact('val'));
         }
+
+
+
     }
 
 

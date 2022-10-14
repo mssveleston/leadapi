@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('campaigns', function (Blueprint $table) {
+        Schema::create('verticals', function (Blueprint $table) {
             $table->id();
-            $table->string('campaign_name');
+            $table->integer('campaign_id');
+            $table->integer('buyer_id');
+            $table->text('vertical')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campaigns');
+        Schema::dropIfExists('verticals');
     }
 };

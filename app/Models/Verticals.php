@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Campaign extends Model
+class Verticals extends Model
 {
     use HasFactory;
-
-    protected $table = 'campaigns';
+    protected $table = 'verticals';
     protected $fillable = [
-        'id',
+        'campaign_id',
+        'buyer_id',
     ];
 }
