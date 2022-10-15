@@ -4,7 +4,7 @@
 
 `composer require tymon/jwt-auth`<br>
 
-Add jwt package into a service provider in config/app.php
+Add jwt package into a service provider in config/app.php<br>
 `'providers' => [
 ...`<br>
 `'Tymon\JWTAuth\Providers\LaravelServiceProvider',
@@ -75,5 +75,29 @@ Response example :
 
 
 ## API Endpoint for seller to send leads.<br>
-`api/lead`
-Parameters: 
+`api/lead`<br><br>
+**_Parameters_**<br>
+`Mandatory: campaign_id,name,email,phone.<br>
+Non Mandatory : dob, region.`<br>
+`Depending on campaign_id : credi_score,health_conditions,covid19_exposed,existing_insurance.
+`
+<br><br>
+Response example:<br>
+`{`<br>
+`"success": true`<br>
+`}`
+
+Mail Service Provider : `Mailtrap`
+
+`MAIL_MAILER=smtp`<br>
+`MAIL_HOST=smtp.mailtrap.io`<br>
+`MAIL_PORT=2525`<br>
+`MAIL_USERNAME=abcxyz`<br>
+`MAIL_PASSWORD=abcxyz`<br>
+`MAIL_ENCRYPTION=tls`<br>
+`MAIL_FROM_ADDRESS=from@example.com`<br>
+`MAIL_FROM_NAME="${APP_NAME}"`<br>
+
+Use Postman To run api endpoint. 
+
+Authentication Type: `Bearer Token`
