@@ -105,13 +105,11 @@ class UserController extends Controller
             $reply =  $this->getbuyeremails($request->get('campaign_id'));
 
              if(count($reply)>0){
-                     //check if email exists and send email
-                     $details['email'] = 'rveleston@gmail.com';
 
+                 for($i=0;$i<count($reply);$i++){
+                     $details['email'] = $reply[$i]->email;
                      dispatch(new \App\Jobs\SendEmailJob($details));
-
-                     //dd('Send Email Successfully');
-
+                 }
              }
                  return response()->json(['success'=>true]);
 

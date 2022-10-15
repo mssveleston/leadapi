@@ -23,42 +23,11 @@ class NewLeadMail extends Mailable
         //
     }
 
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'New Lead Mail',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [];
-    }
 
     public function build()
     {
-        return $this->view('emails.testMail');
+        return $this->view('emails.leadmail');
     }
 }
+
+
