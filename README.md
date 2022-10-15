@@ -6,13 +6,13 @@
 
 Add jwt package into a service provider in config/app.php
 `'providers' => [
-...
-'Tymon\JWTAuth\Providers\LaravelServiceProvider',
-],
-'aliases' => [
-...
-'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+...`<br>
+`'Tymon\JWTAuth\Providers\LaravelServiceProvider',
+],`<br>
+`aliases' => [`<br>
+`...`<br>
+`'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,`<br>
+`'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 ],`
 
 Publish jwt configuration<br>
@@ -25,24 +25,24 @@ Create the Middleware
 `Command: php artisan make:middleware JwtMiddleware`
 
 To use this middleware register this into Kernel. Open app\Http\Kernel.php<br>
-...
-protected $routeMiddleware = [
 `...
-'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
-'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
-'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
-];
+protected $routeMiddleware = [`<br>
+`...`<br>
+`'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,`<br>
+`'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',`<br>
+`'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',`<br>
+`];
 ...`
 
 Configure database<br>
-`...
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=leadapi
-DB_USERNAME=root
-DB_PASSWORD=
-...`
+`...`<br>
+`DB_CONNECTION=mysql`<br>
+`DB_HOST=127.0.0.1`<br>
+`DB_PORT=3306`<br>
+`DB_DATABASE=leadapi`<br>
+`DB_USERNAME=root`<br>
+`DB_PASSWORD=`<br>
+`...`
 
 # **Token Generation**<br>
 
@@ -64,7 +64,7 @@ Response example:
 "token": "abcdxyz"
 }`
 
-## Already Generated Token ?
+## Already Registered & Want to Generated Token ?
 
 Login using api endpoint : `api/login `<br>
 Parameters : `email , password`<br>
@@ -74,3 +74,6 @@ Response example :
 }`
 
 
+## API Endpoint for seller to send leads.<br>
+`api/lead`
+Parameters: 
